@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Spartan:wght@100;200;300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap');
 
 * {
   margin : 0;
@@ -57,6 +58,63 @@ button.normal{
 
 }
 
+#cookies p{
+    color: white;
+   /*display: none;*/
+}
+
+#cookies {
+    width: 100%;
+    bottom: 0;
+    color: white;
+    position: fixed;
+    background-color: rgb(0,0,0,0.7);
+    z-index: 1;
+    display: none;
+}
+.cookies{
+    min-height: 100 px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    color: white;
+
+}
+.cookies a{
+    color: yellow;
+    font-weight: 500;
+    text-decoration: none;
+}
+#cookies *{
+    padding: 0;
+    margin: 0;  
+}
+#cookies body{
+    font-size: 1 rem;
+    font-family: 'Roboto', sans-serif;
+    color: white;
+}
+#cookies .cookie-con .contCK{
+    width: 1600 px;
+    margin: auto;
+}
+#cookies .subcontainer{
+    width: 85%;
+    margin: auto;
+}
+#cookies-btn{
+    border-radius: 10px;
+    padding: 8px 12px 8px 12px;
+    font-size: 1 rem;
+    font-family: inherit;
+    cursor: pointer;
+    border: 3px solid white;
+    background-color: black;
+    color: white;
+}
+
 body {
     width: 100%;
     background-color: var(--primary-color);
@@ -69,6 +127,7 @@ body {
     align-items: center;
     justify-content: center
     ;
+    
 }
 /* Header */
 
@@ -1287,6 +1346,9 @@ footer .copyright{
     .section-p1 {
         padding: 24px 24px;
     }
+    .container {
+        width: 100%;
+    }
 
     #navbar {
         display: flex;
@@ -1384,6 +1446,9 @@ footer .copyright{
     }
     #header {
         padding: 10px 30px;
+    }
+    .cookies{
+        padding: 10px 0;
     }
     h1 {
         font-size: 38px;

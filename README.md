@@ -1,2 +1,0 @@
-# TechJet
- Technology based store

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://kit.fontawesome.com/d0da99657e.js" crossorigin="anonymous"></script>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE-edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechJet</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Include Stripe.js -->
+    <script src="https://js.stripe.com/v3/"></script>
+</head>
+
+<body>
+<!-- Header Section -->
+<section id="header">
+    <a href="#"><img src="img/TechJet-Logo.png" class="logo" alt=""></a>
+    <div>
+        <ul id="navbar">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="shop.html">Shop</a></li>
+            <li><a href="Repair.html">Repair</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li id="lg-bag"><a class="active" href="cart.html"><i class="fa-solid fa-cart-shopping"></i></a></li>
+            <a href="#" id="close"><i class="fa-solid fa-xmark"></i></a>
+            <img src="img/moon.png" id="icon">
+        </ul>
+    </div>
+    <div id="mobile">
+        <a href="cart.html"><i class="fa-solid fa-cart-shopping"></i></a>
+        <i id="bar" class="fas fa-outdent"></i>
+    </div>
+</section>
+
+<!-- Checkout Section -->
+<section id="cart-add" class="section-p1">
+    <div id="coupon">
+        <h3>Apply Coupon</h3>
+        <div>
+            <input type="text" placeholder="Enter Your Coupon">
+            <button class="normal">Apply</button>
+        </div>
+    </div>
+    <div id="subtotal">
+        <h3>Cart Totals</h3>
+        <table>
+            <tr>
+                <td>Cart Subtotal</td>
+                <td>$343</td>
+            </tr>
+            <tr>
+                <td>Shipping</td>
+                <td>Free</td>
+            </tr>
+            <tr>
+                <td><strong>Total</strong></td>
+                <td><strong>$343</strong></td>
+            </tr>
+        </table>
+        <button id="gateway" class="normal">Proceed to Checkout</button>
+    </div>
+</section>
+
+<!-- Footer Section -->
+<footer class="section-p1">
+    <div class="col">
+        <img class="logo" src="img/TechJet-Logo.png" alt="">
+        <h4>Contact</h4>
+        <p><strong>Address:</strong> 9HRW+W8M Unnamed Road, San Andres, Corozal, Belize</p>
+        <p><strong>Phone:</strong> +501 607-0507</p>
+        <p><strong>Hours:</strong> 24/7</p>
+        <div class="follow">
+            <h4>Follow us</h4>
+            <div class="icon">
+                <i class="fab fa-facebook-f"></i>
+                <i class="fab fa-twitter"></i>
+                <i class="fab fa-instagram"></i>
+                <i class="fab fa-pinterest-p"></i>
+                <i class="fab fa-youtube"></i>
+            </div>
+        </div>
+    </div>
+    <div class="copyright">
+        <p>© 2022, TechJet - Tech Repair and Sale</p>
+    </div>
+</footer>
+
+<script>
+    // Stripe Checkout integration
+    const stripe = Stripe('pk_test_51LkvujEYRRBsdae4zOYzpHCN8K4ve9tDX5NLSqxJd7iKG96iVHo6gaGYT0Mqzx2JC7whDdVXWY2cBaePg79DUeC5001QYOjtz5'); // Replace with your Stripe public key
+
+    document.getElementById("gateway").onclick = async function () {
+        try {
+            const response = await fetch('http://localhost:3000/create-checkout-session', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            const session = await response.json();
+
+            // Redirect to Stripe Checkout
+            await stripe.redirectToCheckout({ sessionId: session.id });
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Something went wrong. Please try again.');
+        }
+    };
+</script>
+</body>
+</html>

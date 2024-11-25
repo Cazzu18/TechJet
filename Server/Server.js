@@ -1,13 +1,20 @@
+const path = require('path');
 require('dotenv').config();
 const express = require('express');
-const loginRoute = require('./Routes/LoginRoute');
+const loginRoute = require('./Routes/UserRoute');
 const db = require('./initializeDatabase');
+const StripeRoute = require('./Routes/StripeRoute');
+const product = require('./Routes/ProductRoute');
 
 const app = express();
 app.use(express.json());
+app.use(express.static(path.join(__dirname, '../e-commerce')));
 
+app.use('/api/stripe', StripeRoute);
+app.use('/api/product', product);
 app.use('/auth', loginRoute);
-console.log(process.env.JWT_SECRET);
+
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);

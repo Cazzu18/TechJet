@@ -17,7 +17,7 @@ const login = (req, res) => {
 
                 if(isMatch) {
                     const token = jwt.sign(
-                        {userId: user.user_id, email:user.email},
+                        {userId: user.user_id, email:user.email, isAdmin:user.is_admin},
                         process.env.JWT_SECRET,
                         {expiresIn: '4h'}
                     );
@@ -31,16 +31,16 @@ const login = (req, res) => {
 };
 
 const createAccount = (req, res) => {
-    const { username, email, password, first_name, last_name, address } = req.body;
+    const { username, email, password, first_name, last_name, address, is_admin } = req.body;
     const normalizedEmail = email.trim().toLowerCase();
     bcrypt.hash(password, 10, (err, hashedPass) => {
         if(err){
             return res.status(500).json({error: "Error hashing password"});
         } else {
             db.run( 
-                `INSERT INTO users (username, email, password, first_name, last_name, address)
-                VALUES(?, ?, ?, ?, ?, ?)`,
-                [username, normalizedEmail, hashedPass, first_name, last_name, address],
+                `INSERT INTO users (username, email, password, first_name, last_name, address, is_admin)
+                VALUES(?, ?, ?, ?, ?, ?, ?)`,
+                [username, normalizedEmail, hashedPass, first_name, last_name, address, is_admin],
                 function(err) {
                     if(err) {
                         res.status(500).json({error: err.message});

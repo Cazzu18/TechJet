@@ -1,13 +1,14 @@
 const express = require('express');
 const router = express.Router();
 const { authenticateToken, authenticateAdmin } = require('../Middleware/authenticationToken');
-const { getAllProducts, getProductByCategoryId, addProduct, getProductById, updateProduct, deleteProduct, getAllCategories, filterProductByPrice, searchProducts, getProductReviews } = require('../Controllers/ProductController');
+const { getAllProducts, deleteCategory, getProductByCategoryId, addProduct, getProductById, updateProduct, deleteProduct, getAllCategories, filterProductByPrice, searchProducts, getProductReviews } = require('../Controllers/ProductController');
 
 router.get('/', getAllProducts);
 router.get('/category', getAllCategories);
 router.get('/filter', filterProductByPrice); //use req.query with minPrice and maxPrice
 router.get('/search', searchProducts); //use req.query
 router.get('/category/:category_id', getProductByCategoryId); //category needs to be set in req.params.category_id
+router.delete('/category/:category_id', authenticateToken, authenticateAdmin, deleteCategory);
 router.post('/', authenticateToken, authenticateAdmin, addProduct);
 router.get('/:product_id', getProductById); //product needs to be set in req.params.product_id
 router.put('/:product_id', authenticateToken, authenticateAdmin, updateProduct); //same as above

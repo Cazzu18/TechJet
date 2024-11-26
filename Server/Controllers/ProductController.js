@@ -155,6 +155,44 @@ const getProductReviews = (req, res) => {
     );
 };
 
+const deleteCategory = (req, res) => {
+    const { category_id } = req.params;
+    db.get(
+        `SELECT * FROM category WHERE category_id = ?`,
+        [category_id],
+        (err, row) => {
+            if (err) {
+                return res.status(500).json({ error: "Error searching for category" });
+            }
+            if (!row) {
+                return res.status(404).json({ message: "Category not found" });
+            }
+            db.get(
+                `SELECT * FROM product WHERE category_id = ?`,
+                [category_id],
+                (err, productRow) => {
+                    if (err) {
+                        return res.status(500).json({ error: "Error checking for products in category" });
+                    }
+
+                    if (productRow) {
+                        return res.status(400).json({ message: "Cannot delete category with associated products" });
+                    }
+                    db.run(
+                        `DELETE FROM category WHERE category_id = ?`,
+                        [category_id],
+                        function (err) {
+                            if (err) {
+                                return res.status(500).json({ error: "Error deleting category" });
+                            }
+                            return res.status(200).json({ message: "Category deleted successfully" });
+                        }
+                    );
+                }
+            );
+        }
+    );
+};
 
 module.exports = {
     getAllProducts,
@@ -167,5 +205,5 @@ module.exports = {
     filterProductByPrice,
     searchProducts,
     getProductReviews,
-
+    deleteCategory
 };

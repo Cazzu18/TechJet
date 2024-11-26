@@ -25,5 +25,5 @@ const authenticateAdmin = (req, res, next) => {
 }
 module.exports = {
     authenticateToken,
-    authenticateAdmin,
+    authenticateAdmin
 };

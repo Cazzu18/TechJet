@@ -54,9 +54,13 @@ const createAccount = (req, res) => {
 };
 
 const viewUserProfile = (req, res) => {
+    const checkId = req.user?.userId;  // Safe optional chaining to avoid errors if req.user is undefined
+    if (!checkId) {
+        return res.status(401).json({ message: 'User not authenticated' }); 
+    }
     const userId = req.user.userId;
     
-    db.get(`SELECT * FROM users WHERE user_ID = ?`, [userId], (err, user) =>{
+    db.get(`SELECT * FROM users WHERE user_id = ?`, [userId], (err, user) =>{
         if(err){
             return res.status(500).json({error:'Error retrieving user profile'});
         }

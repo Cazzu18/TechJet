@@ -43,7 +43,7 @@ const addProduct = (req, res) => {
 const getProductById = (req, res) => {
     const productId = req.params.product_id;
     db.get(`
-        SELECT 1 FROM product WHERE product_id = ?`,
+        SELECT * FROM product WHERE product_id = ?`,
     [productId],
     function(err, row){
         if(err){
@@ -58,14 +58,14 @@ const getProductById = (req, res) => {
 
 const updateProduct = (req, res) => {
     const productId = req.params.product_id;
-    const { name, price, description, category_id } = req.body;
+    const { name, description, price, stock_quantity, category_id, image_url } = req.body;
 
     db.run(
-        `UPDATE product SET name = ?, price = ?, description = ?, category_id = ? WHERE product_id = ?`,
-        [name, price, description, category_id, productId],
+        `UPDATE product SET name = ?, description = ?, price = ?, stock_quantity = ?, category_id = ?, image_url = ?  WHERE product_id = ?`,
+        [name, description, price, stock_quantity, category_id, image_url, productId],
         function (err) {
             if (err) {
-                return res.status(500).json({ error: "Error updating product" });
+                return res.status(500).json({ error: "Error updating product", err });
             }
             if (this.changes === 0) {
                 return res.status(404).json({ message: "Product not found" });
@@ -106,7 +106,8 @@ const getAllCategories = (req, res) => {
 
 
 const filterProductByPrice = (req, res) => {
-    const { minPrice, maxPrice } = req.query;
+    const minPrice = req.query.minPrice;
+    const maxPrice = req.query.maxPrice;
 
     db.all(
         `SELECT * FROM product WHERE price BETWEEN ? AND ?`,
@@ -123,7 +124,6 @@ const filterProductByPrice = (req, res) => {
 
 const searchProducts = (req, res) => {
     const { query } = req.query;
-
     db.all(
         `SELECT * FROM product WHERE name LIKE ? OR description LIKE ?`,
         [`%${query}%`, `%${query}%`],
@@ -139,13 +139,16 @@ const searchProducts = (req, res) => {
 
 const getProductReviews = (req, res) => {
     const productId = req.params.product_id;
-
+    console.log(productId);
     db.all(
-        `SELECT * FROM reviews WHERE product_id = ?`,
+        `SELECT * FROM review WHERE product_id = ?`,
         [productId],
         (err, rows) => {
             if (err) {
                 return res.status(500).json({ error: "Error retrieving product reviews" });
+            }
+            if(!rows){
+                return res.status(404).json({message: "Cannot find reviews"});
             }
             return res.status(200).json({ reviews: rows });
         }

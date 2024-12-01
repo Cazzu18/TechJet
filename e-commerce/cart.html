@@ -19,7 +19,6 @@
         <ul id="navbar">
             <li><a href="index.html">Home</a></li>
             <li><a href="shop.html">Shop</a></li>
-            <li><a href="Repair.html">Repair</a></li>
             <li><a href="about.html">About</a></li>
             <li><a href="contact.html">Contact</a></li>
             <li id="lg-bag"><a class="active" href="cart.html"><i class="fa-solid fa-cart-shopping"></i></a></li>
@@ -35,19 +34,29 @@
 
 <!-- Checkout Section -->
 <section id="cart-add" class="section-p1">
-    <div id="coupon">
-        <h3>Apply Coupon</h3>
-        <div>
-            <input type="text" placeholder="Enter Your Coupon">
-            <button class="normal">Apply</button>
-        </div>
+    <div id="cart-items">
+        <h3>Your Cart</h3>
+        <table id="cart-table">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="cart-table-body">
+                <!-- Cart items will be dynamically added here -->
+            </tbody>
+        </table>
     </div>
     <div id="subtotal">
         <h3>Cart Totals</h3>
         <table>
             <tr>
                 <td>Cart Subtotal</td>
-                <td>$343</td>
+                <td id="cart-subtotal">$0</td>
             </tr>
             <tr>
                 <td>Shipping</td>
@@ -55,21 +64,22 @@
             </tr>
             <tr>
                 <td><strong>Total</strong></td>
-                <td><strong>$343</strong></td>
+                <td><strong id="cart-total">$0</strong></td>
             </tr>
         </table>
         <button id="gateway" class="normal">Proceed to Checkout</button>
     </div>
 </section>
 
+
 <!-- Footer Section -->
 <footer class="section-p1">
     <div class="col">
         <img class="logo" src="img/TechJet-Logo.png" alt="">
         <h4>Contact</h4>
-        <p><strong>Address:</strong> 9HRW+W8M Unnamed Road, San Andres, Corozal, Belize</p>
-        <p><strong>Phone:</strong> +501 607-0507</p>
-        <p><strong>Hours:</strong> 24/7</p>
+        <p><strong>Address: </strong> 9HRW+W8M Unnamed Road, San Andres, Corozal, Belize</p>
+        <p><strong>Phone: </strong> +501 607-0507</p>
+        <p><strong>Hours: </strong>24/7</p>
         <div class="follow">
             <h4>Follow us</h4>
             <div class="icon">
@@ -81,8 +91,39 @@
             </div>
         </div>
     </div>
+
+    <div class="col">
+        <h4>About</h4>
+        <a href="about.html">About us</a>
+        <a href="delivery-info.html">Delivery Information</a>
+        <a href="privacy-policy.html">Privacy Policy</a>
+        <a href="terms.html">Terms & Conditions</a>
+        <a href="contact.html">Contact Us</a>
+    </div>
+
+    <div class="col">
+        <h4>My Account</h4>
+        <a href="login.html">Sign In</a>
+        <a href="cart.html">View Cart</a>
+        <a href="wishlist.html">My Wishlist</a>
+        <a href="order.html">Track My Order</a>
+        <a href="help.html">Help</a>
+    </div>
+
+    <div class="col install">
+        <h4>Install App</h4>
+        <p>From App Store or Google Play</p>
+        <div class="row">
+            <img src="img/pay/app.jpg" alt="">
+            <img src="img/pay/play.jpg" alt="">
+
+        </div>
+        <p>Secure Payment Gateways</p>
+        <img src="img/pay/pay.png" alt="">
+    </div>
+
     <div class="copyright">
-        <p>© 2022, TechJet - Tech Repair and Sale</p>
+        <p>© 2022, TechJet- Tech Repair and Sale</p>
     </div>
 </footer>
 
@@ -107,6 +148,63 @@
             alert('Something went wrong. Please try again.');
         }
     };
+
+    // Function to display cart items
+function displayCart() {
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+    const cartTableBody = document.getElementById('cart-table-body');
+    const cartSubtotal = document.getElementById('cart-subtotal');
+    const cartTotal = document.getElementById('cart-total');
+
+    // Clear existing cart items
+    cartTableBody.innerHTML = '';
+
+    let subtotal = 0;
+    cart.forEach(item => {
+        const row = document.createElement('tr');
+
+        row.innerHTML = `
+            <td>${item.name} (${item.color})</td>
+            <td>$${item.price.toFixed(2)}</td>
+            <td>${item.quantity}</td>
+            <td>$${(item.price * item.quantity).toFixed(2)}</td>
+            <td><button class="remove-item" data-name="${item.name}" data-color="${item.color}">Remove</button></td>
+        `;
+
+        cartTableBody.appendChild(row);
+
+        // Update the subtotal
+        subtotal += item.price * item.quantity;
+    });
+
+    cartSubtotal.innerText = `$${subtotal.toFixed(2)}`;
+    cartTotal.innerText = `$${subtotal.toFixed(2)}`;
+}
+
+// Handle remove item from cart
+document.getElementById('cart-table-body').addEventListener('click', function (e) {
+    if (e.target.classList.contains('remove-item')) {
+        const name = e.target.dataset.name;
+        const color = e.target.dataset.color;
+
+        // Remove the item from the cart
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        cart = cart.filter(item => item.name !== name || item.color !== color);
+
+        // Save the updated cart
+        localStorage.setItem('cart', JSON.stringify(cart));
+
+        // Re-display the cart
+        displayCart();
+    }
+});
+
+// Call the function to display the cart on page load
+window.onload = function () {
+    displayCart();
+};
+
 </script>
 </body>
 </html>

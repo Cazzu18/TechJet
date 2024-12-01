@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://kit.fontawesome.com/d0da99657e.js" crossorigin="anonymous"></script>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE-edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechJet</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <section id="header">
+        <a href="#"><img src="img/TechJet-Logo.png" class="logo" alt=""></a>
+
+        <div>
+            <ul id="navbar">
+                <li><a href="index.html">Home</a></li>
+                <li><a class="active" href="shop.html">Shop</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li id="lg-bag"><a href="cart.html"><i class="fa-solid fa-cart-shopping"></i></a></li>
+                <a href="#" id="close"><i class="fa-solid fa-xmark"></i></a>
+                <img src="img/moon.png" id="icon">
+            </ul>
+        </div>
+        <div id="mobile">
+            <a href="cart.html"><i class="fa-solid fa-cart-shopping"></i></a>
+            <i id="bar" class="fas fa-outdent"></i>
+        </div>
+    </section>
+
+    <section id="prodetails" class="section-p1">
+        <div class="single-pro-image">
+            <div class="small-img-group" id="image-container">
+                <!-- Product Images will be inserted here dynamically -->
+            </div>
+        </div>
+
+        <div class="single-pro-details">
+            <h6>Home / Phones</h6>
+            <h4 id="product-name">Loading...</h4>
+            <h2 id="product-price">$0.00</h2>
+            <select id="color-options">
+                <option>Select Color</option>
+                <option>Jet Black</option>
+                <option>Gold</option>
+                <option>Silver</option>
+                <option>Rose Gold</option>
+            </select>
+            <input type="number" value="1">
+            <button class="normal" id="add-to-cart">Add To Cart</button>
+            <h4>Details</h4>
+            <span id="product-description">Loading...</span>
+        </div>
+    </section>
+
+    <script>
+        // Function to get the value of a query parameter by name
+        function getQueryParameter(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+
+        // Get the product_id from the URL
+        const productId = getQueryParameter('id');
+
+        // Example API call to fetch product details based on productId
+        async function fetchProductDetails(productId) {
+            try {
+                // Replace with your actual API endpoint
+                const response = await fetch(`http://localhost:3000/api/product/${productId}`);
+                const responseData = await response.json();
+                const productData = responseData.product;
+                console.log(productData);
+                if (productData) {
+                    // Dynamically populate the product details
+                    document.getElementById('product-name').innerText = productData.name;
+                    document.getElementById('product-price').innerText = `$${productData.price}`;
+                    document.getElementById('product-description').innerText = productData.description;
+
+                    // Check if productData.image_url is an array or a single string
+                    const imageContainer = document.getElementById('image-container');
+                    imageContainer.innerHTML = ''; // Clear any existing images
+
+                    // Check if productData.image_url is an array or a single string
+                    const images = Array.isArray(productData.image_url) ? productData.image_url : [productData.image_url];
+
+                    // Loop through each image and create the image elements dynamically
+                    images.forEach((image, index) => {
+                    const imgElement = document.createElement('img');
+                    imgElement.src = image;
+                    imgElement.classList.add('small-img'); // Ensure this class is in your CSS
+                    imgElement.onclick = function () {
+                    document.getElementById('MainImg').src = image;
+                    };
+
+                    imageContainer.appendChild(imgElement);
+                    });
+
+                    // Optionally handle color options if they exist in the data
+                    const colorSelect = document.getElementById('color-options');
+                    productData.colors.forEach(color => {
+                        const option = document.createElement('option');
+                        option.value = color;
+                        option.innerText = color;
+                        colorSelect.appendChild(option);
+                    });
+                }
+            } catch (error) {
+                console.error('Error fetching product details:', error);
+            }
+        }
+
+        // Fetch product details when the page loads
+        if (productId) {
+            fetchProductDetails(productId);
+        }
+
+        document.getElementById('add-to-cart').addEventListener('click', function () {
+            // Get product details
+            const productName = document.getElementById('product-name').innerText;
+            const productPrice = parseFloat(document.getElementById('product-price').innerText.replace('$', ''));
+            const productColor = document.getElementById('color-options').value;
+            const productQuantity = parseInt(document.querySelector('input[type="number"]').value);
+        
+            // Create a product object
+            const product = {
+                name: productName,
+                price: productPrice,
+                color: productColor,
+                quantity: productQuantity,
+            };
+        
+            // Get the existing cart from localStorage, or initialize a new one
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        
+            // Check if the product is already in the cart
+            const existingProductIndex = cart.findIndex(item => item.name === product.name && item.color === product.color);
+        
+            if (existingProductIndex !== -1) {
+                // Update the quantity of the existing product
+                cart[existingProductIndex].quantity += productQuantity;
+            } else {
+                // Add new product to the cart
+                cart.push(product);
+            }
+        
+            // Save the updated cart to localStorage
+            localStorage.setItem('cart', JSON.stringify(cart));
+        
+            // Optionally, alert the user or update the cart icon with the number of items
+            alert('Product added to cart!');
+        });
+    </script>
+
+</body>
+</html>

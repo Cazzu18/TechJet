@@ -1,6 +1,7 @@
 const path = require('path');
 require('dotenv').config();
 const express = require('express');
+const cors = require('cors');
 const loginRoute = require('./Routes/UserRoute');
 const db = require('./initializeDatabase');
 const StripeRoute = require('./Routes/StripeRoute');
@@ -9,8 +10,10 @@ const orderRoute = require('./Routes/OrderRoute');
 const shippingRoute = require('./Routes/ShippingRoute');
 
 const app = express();
+
+app.use(cors());
 app.use(express.json());
-app.use(express.static(path.join(__dirname, '../e-commerce')));
+app.use(express.static(path.join(__dirname, '../TechJet')));
 
 app.use('/api/stripe', StripeRoute);
 app.use('/api/product', product);

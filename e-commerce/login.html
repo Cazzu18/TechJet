@@ -64,7 +64,7 @@
                     const password = document.getElementById("password").value;
 
                     // Send login data to the backend API
-                    fetch('/auth/login', { // Use the correct backend endpoint
+                    fetch('http://localhost:3000/auth/login', { // Use the correct backend endpoint
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -80,7 +80,7 @@
                                 alert("Login successful!");
                                 // You can save the token in localStorage or sessionStorage to persist the login
                                 localStorage.setItem("authToken", data.token);
-                                window.location.href = "/index.html"; // Redirect to the dashboard or home page
+                                window.location.href = "index.html"; // Redirect to the dashboard or home page
                             } else {
                                 alert("Invalid username or password.");
                             }

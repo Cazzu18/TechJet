@@ -6,12 +6,15 @@ const login = (req, res) => {
     const {username, password} = req.body;
     db.get(`SELECT * FROM users WHERE username = ?`, [username], (err, user) => {
         if(err) {
+            console.error("Database error:", err)
             return res.status(500).json({error: err.message});
         } else if (!user) {
+            console.log("User not found")
             return res.status(401).json({error: "Invalid email or password"});
         } else{
             bcrypt.compare(password, user.password, (err, isMatch) => {
                 if(err){
+                    console.log("Error Comparing passwords")
                     return res.status(500).json({error: "Error comparing passwords"});
                 } 
 
@@ -23,6 +26,7 @@ const login = (req, res) => {
                     );
                     res.status(200).json({message: 'Login successful', token});
                 } else{
+                    console.log("Password did not match")
                     res.status(400).json({message: 'Invalid email or password'});
                 }
             });

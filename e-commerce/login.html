@@ -51,7 +51,7 @@
                 <span>LOGIN TO GET STARTED!</span>
                 <h2>Welcome to TechJet</h2>
                 <input type="text" id="username" name="name" placeholder="Username" required>
-                <input type="password" id="password" name="password" pattern="(?=.*\d)(?=.*[\W_]).{8,}" title="Minimum of 8 characters. Should have at least one special character and one number." placeholder="Password" minlength="8" required>
+                <input type="password" id="password" name="password" placeholder="Password" minlength="8" required>
                 <button class="normal" type ="submit">Login</button>
             </form>
             <script>
@@ -63,17 +63,35 @@
                     const username = document.getElementById("username").value;
                     const password = document.getElementById("password").value;
 
-                    // Perform login logic here (e.g., send an API request)
-                    // Example:
-                    if (username === "user" && password === "password") {
-                        alert("Login successful!");
-
-                        // Redirect to a new page or perform other actions
-                    } else {
-                        alert("Invalid username or password.");
-                    }
+                    // Send login data to the backend API
+                    fetch('/auth/login', { // Use the correct backend endpoint
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            username: username,
+                            password: password,
+                        }),
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.token) {
+                                alert("Login successful!");
+                                // You can save the token in localStorage or sessionStorage to persist the login
+                                localStorage.setItem("authToken", data.token);
+                                window.location.href = "/index.html"; // Redirect to the dashboard or home page
+                            } else {
+                                alert("Invalid username or password.");
+                            }
+                        })
+                        .catch(error => {
+                            console.error("Error:", error);
+                            alert("An error occurred during login.");
+                        });
                 });
             </script>
+
 
         </section>
 

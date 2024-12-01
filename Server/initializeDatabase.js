@@ -8,11 +8,11 @@ const db = new sqlite3.Database(dbPath, (err) => {
         console.error('Error connecting to database: ', err);
     } else {
         console.log('Connected to database');
-        intializeDatabase();
+        initializeDatabase();
     }
 });
 
-function intializeDatabase() {
+function initializeDatabase() {
     db.serialize(() => {
         db.run(
             `CREATE TABLE IF NOT EXISTS users(
@@ -161,6 +161,6 @@ function intializeDatabase() {
     });
 }
 
-intializeDatabase();
+initializeDatabase();
 
 module.exports = db;

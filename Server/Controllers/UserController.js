@@ -78,47 +78,69 @@ const viewUserProfile = (req, res) => {
 const updateUserProfile = async (req, res) => {
     try {
         const userId = req.user.userId;
-        const { username, email, password, first_name, last_name, address } = req.body;
+        const { username, email, oldPassword, newPassword, first_name, last_name, address } = req.body;
         const updateFields = [];
         const values = [];
 
-        if (email) {
-            const normalizedEmail = email.trim().toLowerCase();
-            updateFields.push("email = ?");
-            values.push(normalizedEmail);
-        }
-
-        if (password) {
-            const hashedPass = await bcrypt.hash(password, 10);
-            updateFields.push("password = ?");
-            values.push(hashedPass);
-        }
-
-        if (username) { updateFields.push("username = ?"); values.push(username); }
-        if (first_name) { updateFields.push("first_name = ?"); values.push(first_name); }
-        if (last_name) { updateFields.push("last_name = ?"); values.push(last_name); }
-        if (address) { updateFields.push("address = ?"); values.push(address); }
-
-        if (updateFields.length === 0) {
-            return res.status(400).json({ error: "No fields to update" });
-        }
-
-        const query = `UPDATE users SET ${updateFields.join(", ")} WHERE user_id = ?`;
-        values.push(userId);
-
-        db.run(query, values, function (err) {
+        // Retrieve the current password from the database
+        const queryGetPassword = `SELECT password FROM users WHERE user_id = ?`;
+        db.get(queryGetPassword, [userId], async (err, row) => {
             if (err) {
-                return res.status(500).json({ error: "Error updating profile" });
+                return res.status(500).json({ error: "Error retrieving user data" });
             }
-            if (this.changes === 0) {
-                return res.status(404).json({ error: "User not found or no changes detected" });
+
+            if (!row) {
+                return res.status(404).json({ error: "User not found" });
             }
-            res.status(200).json({ message: "Profile updated successfully" });
+
+            const storedPassword = row.password;
+
+            // If the old password is provided, compare it with the stored password
+            if (oldPassword && newPassword) {
+                const isMatch = await bcrypt.compare(oldPassword, storedPassword);
+                if (!isMatch) {
+                    return res.status(400).json({ error: "Old password does not match" });
+                }
+
+                // Hash the new password
+                const hashedPass = await bcrypt.hash(newPassword, 10);
+                updateFields.push("password = ?");
+                values.push(hashedPass);
+            }
+
+            // Update other fields
+            if (email) {
+                const normalizedEmail = email.trim().toLowerCase();
+                updateFields.push("email = ?");
+                values.push(normalizedEmail);
+            }
+            if (username) { updateFields.push("username = ?"); values.push(username); }
+            if (first_name) { updateFields.push("first_name = ?"); values.push(first_name); }
+            if (last_name) { updateFields.push("last_name = ?"); values.push(last_name); }
+            if (address) { updateFields.push("address = ?"); values.push(address); }
+
+            if (updateFields.length === 0) {
+                return res.status(400).json({ error: "No fields to update" });
+            }
+
+            const queryUpdate = `UPDATE users SET ${updateFields.join(", ")} WHERE user_id = ?`;
+            values.push(userId);
+
+            db.run(queryUpdate, values, function (err) {
+                if (err) {
+                    return res.status(500).json({ error: "Error updating profile" });
+                }
+                if (this.changes === 0) {
+                    return res.status(404).json({ error: "User not found or no changes detected" });
+                }
+                res.status(200).json({ message: "Profile updated successfully" });
+            });
         });
     } catch (err) {
         res.status(500).json({ error: "An unexpected error occurred" });
     }
 };
+
 
 const adminGetUser = (req, res) => {
     const { userId } = req.params;

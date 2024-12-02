@@ -5,21 +5,20 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE-edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title> TechJet </title>
+        <title>Delivery Information | TechJet</title>
         <link rel="stylesheet" href="style.css">
     </head>
 
     <body>
-
         <section id="header">
             <a href="#"><img src="img/TechJet-Logo.png" class="logo" alt=""></a>
-
             <div>
                 <ul id="navbar">
                     <li><a href="index.html">Home</a></li>
                     <li><a href="shop.html">Shop</a></li>
-                    <li><a class="active" href="about.html">About</a></li>
+                    <li><a href="about.html">About</a></li>
                     <li><a href="contact.html">Contact</a></li>
+                    <li><a href="profile.html">Profile</a></li>
                     <li id="lg-bag"><a href="cart.html"><i class="fa-solid fa-cart-shopping"></i></a></li>
                     <a href="#" id="close"><i class="fa-solid fa-xmark"></i></a>
                     <img src="img/moon.png" id="icon">
@@ -27,81 +26,36 @@
             </div>
             <div id="mobile">
                 <a href="cart.html"><i class="fa-solid fa-cart-shopping"></i></a>
-                <i id="bar"class="fas fa-outdent"></i>
-            </div>
-
-        </section>
-
-        <section id="page-header" class="about-header">
-            <h2>#KnowUS</h2>
-            <p>A group of young and ambitious developers paired with an outstanding educator!</p>
-        </section>
-
-        <section id="about-head" class="section-p1">
-            <img src="img/about/a6.jpg" alt="">
-            <div>
-                <h2>Who Are We?</h2>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-                    Proin sagittis nisl rhoncus mattis rhoncus urna neque. Sollicitudin aliquam ultrices sagittis orci. Ut lectus arcu bibendum at. 
-                    Quis risus sed vulputate odio ut enim blandit volutpat maecenas. Enim sit amet venenatis urna cursus.</p>
-                <abbr title="">the raok the raok the raok the raokthe raokthe raokthe raokthe raokthe raokthe raokthe raokthe raok
-                    the raokthe raokthe raokthe raokthe raokthe raokthe raokthe raok
-                </abbr>
-                
-                <br><br> 
-
-                <marquee bgcolor="#ccc" loop="-1" scrollamount="5" width="100%">Straight outa compton</marquee>
-            </div>
-        </section>
-        
-        <section id="about-app" class="section-p1">
-            <h1>Download our <a href="#">App</a></h1>
-            <div class="video">
-                <video autoplay muted  loop src="img/about/1.mp4"></video>
+                <i id="bar" class="fas fa-outdent"></i>
             </div>
         </section>
 
-        <section id="feature" class="section-p1">
-            <div class="fe-box">
-                <img src="img/features/f1.png" alt="">
-                <h6>Online Order</h6>
-            </div>
-
-            <div class="fe-box">
-                <img src="img/features/f2.png" alt="">
-                <h6>Fast Shipping</h6>
-            </div>
-
-            <div class="fe-box">
-                <img src="img/features/f3.png" alt="">
-                <h6>Affordable</h6>
-            </div>
-
-            <div class="fe-box">
-                <img src="img/features/f4.png" alt="">
-                <h6>Customer Satisfaction</h6>
-            </div>
-
-            <div class="fe-box">
-                <img src="img/features/f5.png" alt="">
-                <h6>Willing Sale</h6>
-            </div>
-
-            <div class="fe-box">
-                <img src="img/features/f6.png" alt="">
-                <h6>Customer Support</h6>
-            </div>
-
+        <section id="page-header" class="delivery-header">
+            <h2>#TrackMyOrder</h2>
+            <p>Check your order details and shipping status below!</p>
         </section>
 
-        <section id="newsletter" class="section-p1 section-m1">
-            <div class="newstext">
-                <h4>Sign Up For Newsletters</h4>
-                <p>Get E-mail updates about our latest items and <span>special offers</span></p>
-            </div>
-            <div class="form">
-                <input type="text" placeholder="Your email address">
-                <button class="normal">Sign Up</button>
+        <section id="delivery-info" class="section-p1">
+            <div class="order-section">
+                <h3>Your Orders</h3>
+                <table id="order-table">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Product</th>
+                            <th>Quantity</th>
+                            <th>Total Amount</th>
+                            <th>Status</th>
+                            <th>Order Date</th>
+                            <th>Shipping Address</th>
+                            <th>Shipping Status</th>
+                            <th>Shipping Date</th>
+                        </tr>
+                    </thead>
+                    <tbody id="order-table-body">
+                        <!-- Data will be dynamically populated -->
+                    </tbody>
+                </table>
             </div>
         </section>
 
@@ -109,8 +63,8 @@
             <div class="col">
                 <img class="logo" src="img/TechJet-Logo.png" alt="">
                 <h4>Contact</h4>
-                <p><strong>Address: </strong> 9HRW+W8M Unnamed Road, San Andres, Corozal, Belize</p>
-                <p><strong>Phone: </strong> +501 607-0507</p>
+                <p><strong>Address: </strong>9HRW+W8M Unnamed Road, San Andres, Corozal, Belize</p>
+                <p><strong>Phone: </strong>+501 607-0507</p>
                 <p><strong>Hours: </strong>24/7</p>
                 <div class="follow">
                     <h4>Follow us</h4>
@@ -148,17 +102,146 @@
                 <div class="row">
                     <img src="img/pay/app.jpg" alt="">
                     <img src="img/pay/play.jpg" alt="">
-
                 </div>
                 <p>Secure Payment Gateways</p>
                 <img src="img/pay/pay.png" alt="">
             </div>
 
             <div class="copyright">
-                <p>© 2022, TechJet- Tech Repair and Sale</p>
+                <p>© 2022, TechJet - Tech Repair and Sale</p>
             </div>
         </footer>
-        <script src="script.js"></script>
-        <script src="project.js"></script>
-    </body>  
+
+        <script>
+            async function fetchOrderInfo() {
+                try {
+                    // Retrieve the authToken from localStorage
+                    const token = localStorage.getItem('authToken');
+                    
+                    if (!token) {
+                        console.error('No authToken found in localStorage');
+                        alert('You must be logged in to view order information.');
+                        return;
+                    }
+        
+                    const response = await fetch('http://localhost:3000/api/orders', {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': `Bearer ${token}`, // Include the token in the Authorization header
+                            'Content-Type': 'application/json',
+                        },
+                    });
+        
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+        
+                    const responseData = await response.json();
+                    console.log('Full Response:', responseData);
+        
+                    // Unwrap the orders array from the wrapper
+                    const orders = responseData.orders || []; // Replace `orders` with the actual key in the wrapper
+        
+                    const tableBody = document.getElementById('order-table-body');
+                    tableBody.innerHTML = '';
+        
+                    if (orders.length === 0) {
+                        // Show a message if no orders are found
+                        const noOrderRow = document.createElement('tr');
+                        noOrderRow.innerHTML = `<td colspan="9" style="text-align:center;">No current orders</td>`;
+                        tableBody.appendChild(noOrderRow);
+                        return;
+                    }
+        
+                    orders.forEach(order => {
+                        // Handle multiple products per order
+                        order.products.forEach(product => {
+                            const row = document.createElement('tr');
+                            row.innerHTML = `
+                                <td>${order.order_id}</td>
+                                <td>${product.name}</td>
+                                <td>${product.quantity}</td>
+                                <td>$${product.price.toFixed(2)}</td>
+                                <td>${order.status}</td>
+                                <td>${new Date(order.order_date).toLocaleDateString()}</td>
+                                <td>${order.shipping.address}</td>
+                                <td>${order.shipping.status}</td>
+                                <td>${order.shipping.date ? new Date(order.shipping.date).toLocaleDateString() : 'N/A'}</td>
+                            `;
+                            tableBody.appendChild(row);
+                        });
+                    });
+                } catch (error) {
+                    console.error('Error fetching order information:', error);
+                    alert('Failed to fetch order information. Please try again later.');
+                }
+            }
+        
+            // Load order info when the page loads
+            window.onload = fetchOrderInfo;
+        </script>
+        
+        <style>
+            /* General Table Styling */
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin: 20px 0;
+                font-size: 16px;
+                text-align: center;
+            }
+        
+            /* Table Header Styling */
+            thead th {
+                background-color: #65bfd4; /* Green header */
+                color: white;
+                padding: 10px;
+                text-transform: uppercase;
+            }
+        
+            /* Table Body Styling */
+            tbody tr {
+                border-bottom: 1px solid #ddd;
+            }
+        
+            tbody tr:nth-child(even) {
+                background-color: #f9f9f9;
+            }
+        
+            tbody tr:hover {
+                background-color: #f1f1f1; /* Highlight on hover */
+            }
+        
+            tbody td {
+                padding: 10px;
+            }
+        
+            /* Center "No Current Orders" Message */
+            tbody tr td[colspan] {
+                text-align: center;
+                font-style: italic;
+                font-size: 18px;
+                color: #888;
+            }
+        
+            /* Add Some Spacing to the Table */
+            table {
+                border: 1px solid #ddd;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+                border-radius: 5px;
+            }
+        
+            /* Responsive Table */
+            @media (max-width: 768px) {
+                table {
+                    font-size: 14px;
+                }
+        
+                thead th, tbody td {
+                    padding: 8px;
+                }
+            }
+        </style>
+        
+    </body>
 </html>

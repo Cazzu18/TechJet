@@ -877,6 +877,18 @@ footer .copyright{
     color: var(--secondary-color);
     font-size: 12px;
 }
+#contact-details .details span,
+#form-details-edit form span{
+    color: var(--secondary-color);
+    font-size: 12px;
+}
+
+#contact-details .details span,
+#form-details-remove form span{
+    color: var(--secondary-color);
+    font-size: 12px;
+}
+
 
 #contact-details .details h2,
 #form-details form h2{
@@ -885,6 +897,22 @@ footer .copyright{
     line-height: 35px;
     padding: 20px 0;
 }
+
+#contact-details .details h2,
+#form-details-edit form h2{
+    color: var(--secondary-color);
+    font-size: 26px;
+    line-height: 35px;
+    padding: 20px 0;
+}
+#contact-details .details h2,
+#form-details-remove form h2{
+    color: var(--secondary-color);
+    font-size: 26px;
+    line-height: 35px;
+    padding: 20px 0;
+}
+
 
 #contact-details .details h3{
     color: var(--secondary-color);
@@ -929,7 +957,37 @@ footer .copyright{
     border: 1px solid #e1e1e1;
 }
 
+#form-details-edit{
+    display: flex;
+    justify-content: space-between;
+    margin: 30px;
+    padding: 80px;
+    border: 1px solid #e1e1e1;
+}
+
+#form-details-remove{
+    display: flex;
+    justify-content: space-between;
+    margin: 30px;
+    padding: 80px;
+    border: 1px solid #e1e1e1;
+}
+
 #form-details form{
+    width: 65%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+#form-details-edit form{
+    width: 65%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+#form-details-remove{
     width: 65%;
     display: flex;
     flex-direction: column;
@@ -946,7 +1004,36 @@ footer .copyright{
     border: 1px solid #e1e1e1;
 }
 
+#form-details-edit form input,
+#form-details-edit form textarea{
+    background-color: var(--primary-color);
+    width: 100%;
+    padding: 12px 15px;
+    outline: none;
+    margin-bottom: 20px;
+    border: 1px solid #e1e1e1;
+}
+#form-details-remove form input,
+#form-details-remove form textarea{
+    background-color: var(--primary-color);
+    width: 100%;
+    padding: 12px 15px;
+    outline: none;
+    margin-bottom: 20px;
+    border: 1px solid #e1e1e1;
+}
+
 #form-details form button{
+    background-color: #dd5577;
+    color: #fff;
+}
+
+#form-details-edit form button{
+    background-color: #dd5577;
+    color: #fff;
+}
+
+#form-details-remove form button{
     background-color: #dd5577;
     color: #fff;
 }
@@ -1745,11 +1832,28 @@ footer .copyright{
         padding: 40px;
     }
 
+    #form-details-edit {
+        padding: 40px;
+    }
+
+    #form-details-remove {
+        padding: 40px;
+    }
+
     #form-details form {
         width: 50%;
     }
 
-    
+    #form-details-edit form {
+        width: 50%;
+    }
+
+    #form-details-remove form {
+        width: 50%;
+    }
+
+
+
 }
 
 @media (max-width: 640px) {
@@ -1858,8 +1962,26 @@ footer .copyright{
         padding: 30px 10px;
         flex-wrap: wrap;
     }
+    #form-details-edit {
+        margin: 10px;
+        padding: 30px 10px;
+        flex-wrap: wrap;
+    }
+    #form-details-remove {
+        margin: 10px;
+        padding: 30px 10px;
+        flex-wrap: wrap;
+    }
+    #form-details-edit form {
+        width: 100%;
+        margin-bottom: 30px;
+    }
 
     #form-details form {
+        width: 100%;
+        margin-bottom: 30px;
+    }
+    #form-details-remove form {
         width: 100%;
         margin-bottom: 30px;
     }

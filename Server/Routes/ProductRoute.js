@@ -1,7 +1,53 @@
 const express = require('express');
+const path = require('path');
 const router = express.Router();
 const { authenticateToken, authenticateAdmin } = require('../Middleware/authenticationToken');
 const { getAllProducts, deleteCategory, getProductByCategoryId, addProduct, getProductById, updateProduct, deleteProduct, getAllCategories, filterProductByPrice, searchProducts, getProductReviews } = require('../Controllers/ProductController');
+const multer = require("multer");
+
+// Configure multer to store images in the 'e-commerce/img/products' folder
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, path.join(__dirname, '../../e-commerce/img/products'));
+    },
+    filename: (req, file, cb) => {
+        cb(null, file.originalname); // Retain the original name
+    },
+});
+
+const upload = multer({ storage: storage });
+
+// Endpoint to handle image upload
+router.post('/upload', upload.single('image'), (req, res) => {
+    if (req.file) {
+        const relativePath = `img/products/${req.file.filename}`; // No leading '/'
+        res.status(200).json({ url: relativePath });
+    } else {
+        res.status(400).json({ error: 'No file uploaded' });
+    }
+});
+
+// Update route to handle file upload
+router.put('/:product_id', authenticateToken, authenticateAdmin, upload.single('image'), updateProduct);
+
+router.post('/', upload.single('image'), (req, res) => {
+    const { name, description, price, stock, category } = req.body;
+    let image_url = '';
+
+    if (req.file) {
+        image_url = `img/products/${req.file.filename}`; // Store the relative image URL
+    }
+
+    // Call the addProduct function to add the product to the database
+    addProduct(name, description, price, stock, category, image_url, (err, result) => {
+        if (err) {
+            return res.status(500).json({ error: 'Failed to add product' });
+        }
+
+        return res.status(200).json({ message: 'Product added successfully', product: result });
+    });
+});
+
 
 router.get('/', getAllProducts);
 router.get('/category', getAllCategories);
@@ -11,7 +57,6 @@ router.get('/category/:category_id', getProductByCategoryId); //category needs t
 router.delete('/category/:category_id', authenticateToken, authenticateAdmin, deleteCategory);
 router.post('/', authenticateToken, authenticateAdmin, addProduct);
 router.get('/:product_id', getProductById); //product needs to be set in req.params.product_id
-router.put('/:product_id', authenticateToken, authenticateAdmin, updateProduct); //same as above
 router.delete('/:product_id', authenticateToken, authenticateAdmin, deleteProduct); //also same
 router.get('/:product_id/reviews', getProductReviews);
 

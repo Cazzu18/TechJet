@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="https://kit.fontawesome.com/d0da99657e.js" crossorigin="anonymous"></script>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE-edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title> TechJet </title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<section id="header">
+  <a href="#"><img src="img/TechJet-Logo.png" class="logo" alt=""></a>
+
+  <div>
+    <ul id="navbar">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="shop.html">Shop</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a class="active" href="content_management.html">Content Management</a></li>
+      <li id="lg-bag"><a href="cart.html"><i class="fa-solid fa-cart-shopping"></i></a></li>
+      <a href="#" id="close"><i class="fa-solid fa-xmark"></i></a>
+      <img src="img/moon.png" id="icon">
+    </ul>
+  </div>
+  <div id="mobile">
+    <a href="cart.html"><i class="fa-solid fa-cart-shopping"></i></a>
+    <i id="bar"class="fas fa-outdent"></i>
+  </div>
+
+</section>
+
+<section id="page-header" class="about-header">
+  <h2>#ADD, EDIT, REMOVE PRODUCTS BASED ON AVAILABILITY</h2>
+  <p>The freedom to build your website as desired!</p>
+</section>
+
+<section id="form-details">
+  <form id="addProduct">
+    <span>ADD PRODUCTS</span>
+    <h2>Got new stock? Add them here!</h2>
+    <input type="text" name="name" placeholder="Product Name" required>
+    <textarea type="text" name="description" cols="30" rows="10" placeholder="Description" required></textarea>
+    <input type="number" min="0" max="10000" name ="price" placeholder="Price" required>
+    <input type="number" min="0" max="10000" name ="stock" placeholder="Stock Quantity" required>
+    <input type="number" min="0" max="10000" name ="category" placeholder="Category ID" required>
+    <input type="file" class="form-input" name="image" accept="image/*" required>
+    <button class="normal" type ="submit">Submit</button>
+  </form>
+  <script src="add.js"></script>
+
+</section>
+
+<section id="form-details-edit">
+
+  <div class="cms-box">
+    <h3>Product List</h3>
+    <table id="product-table">
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Price</th>
+        <th>Stock</th>
+        <th>Category</th>
+        <th>Image</th>
+      </tr>
+      </thead>
+      <tbody>
+      <!-- Table rows will be populated here -->
+      </tbody>
+    </table>
+  </div>
+
+  <form id="editProduct">
+    <span>EDIT PRODUCTS</span>
+    <h2>Make changes to existing stock</h2>
+    <input type="text" name="name" placeholder="Product Name" required>
+    <textarea type="text" name="description" cols="30" rows="10" placeholder="Description" required></textarea>
+    <input type="number" min="0" max="10000" step="0.01" name ="price" placeholder="Price" required>
+    <input type="number" min="0" max="10000" name ="stock" placeholder="Stock Quantity" required>
+    <input type="number" min="0" max="10000" name ="category" placeholder="Category ID" required>
+    <input type="file" class="form-input" name="image" accept="image/*" required> <img id="image-preview" style="width: 100px; height: 100px;" src="" alt="Current Product Image">
+    <button class="normal" type ="submit">Edit</button>
+  </form>
+
+  <script src="edit.js"></script>
+
+</section>
+
+<section id="form-details-remove">
+  <form id="title">
+    <span>REMOVE PRODUCTS</span>
+    <h2>Choose what to remove!</h2>
+  </form>
+
+  <div class="cms-box">
+    <h3>Product List</h3>
+    <table id="products-table">
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Price</th>
+        <th>Stock</th>
+        <th>Category</th>
+        <th>Image</th>
+      </tr>
+      </thead>
+      <tbody>
+
+      </tbody>
+    </table>
+  </div>
+
+  <form id="removeProduct">
+    <button class="normal" type ="submit">Remove</button>
+  </form>
+
+  <script src="remove.js"></script>
+
+
+</section>
+
+<section id="newsletter" class="section-p1 section-m1">
+  <div class="newstext">
+    <h4>Sign Up For Newsletters</h4>
+    <p>Get E-mail updates about our latest items and <span>special offers</span></p>
+  </div>
+  <div class="form">
+    <input type="text" placeholder="Your email address">
+    <button class="normal">Sign Up</button>
+  </div>
+</section>
+
+<footer class="section-p1">
+  <div class="col">
+    <img class="logo" src="img/TechJet-Logo.png" alt="">
+    <h4>Contact</h4>
+    <p><strong>Address: </strong> 9HRW+W8M Unnamed Road, San Andres, Corozal, Belize</p>
+    <p><strong>Phone: </strong> +501 607-0507</p>
+    <p><strong>Hours: </strong>24/7</p>
+    <div class="follow">
+      <h4>Follow us</h4>
+      <div class="icon">
+        <i class="fab fa-facebook-f"></i>
+        <i class="fab fa-twitter"></i>
+        <i class="fab fa-instagram"></i>
+        <i class="fab fa-pinterest-p"></i>
+        <i class="fab fa-youtube"></i>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <h4>About</h4>
+    <a href="about.html">About us</a>
+    <a href="delivery-info.html">Delivery Information</a>
+    <a href="privacy-policy.html">Privacy Policy</a>
+    <a href="terms.html">Terms & Conditions</a>
+    <a href="contact.html">Contact Us</a>
+  </div>
+
+  <div class="col">
+    <h4>My Account</h4>
+    <a href="login.html">Sign In</a>
+    <a href="cart.html">View Cart</a>
+    <a href="wishlist.html">My Wishlist</a>
+    <a href="order.html">Track My Order</a>
+    <a href="help.html">Help</a>
+  </div>
+
+  <div class="col install">
+    <h4>Install App</h4>
+    <p>From App Store or Google Play</p>
+    <div class="row">
+      <img src="img/pay/app.jpg" alt="">
+      <img src="img/pay/play.jpg" alt="">
+
+    </div>
+    <p>Secure Payment Gateways</p>
+    <img src="img/pay/pay.png" alt="">
+  </div>
+
+  <div class="copyright">
+    <p>© 2022, TechJet- Tech Repair and Sale</p>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+<script src="project.js"></script>
+</body>

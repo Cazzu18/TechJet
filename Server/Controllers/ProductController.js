@@ -26,16 +26,16 @@ const getProductByCategoryId = (req, res) => {
 };
 
 const addProduct = (req, res) => {
-    const { name, description, price, stock_quantity, category_id, image_url } = req.body;
+    const { name, description, price, stock_quantity, category_id, image_url, callback} = req.body;
     db.run(`
         INSERT INTO product(name, description, price, stock_quantity, category_id, image_url)
         VALUES(?, ?, ?, ?, ?, ?)`,
         [name, description, price, stock_quantity, category_id, image_url],
         function (err){
             if(err){
-                return res.status(500).json({error: "Error adding a new product"});
+                return callback(err, null);
             }
-            return res.status(200).json({message: `${name} added successfully`});
+            return callback(null, { product_id: this.lastID, name, description, price, stock_quantity, category_id, image_url });
         }
     )
 };  
@@ -58,7 +58,14 @@ const getProductById = (req, res) => {
 
 const updateProduct = (req, res) => {
     const productId = req.params.product_id;
-    const { name, description, price, stock_quantity, category_id, image_url } = req.body;
+    const { name, description, price, stock_quantity, category_id} = req.body;
+
+    let image_url = req.body.image_url; // Default to existing URL
+
+    if (req.file) {
+        image_url = `img/products/${req.file.filename}`; // Correct relative path
+    }
+
 
     db.run(
         `UPDATE product SET name = ?, description = ?, price = ?, stock_quantity = ?, category_id = ?, image_url = ?  WHERE product_id = ?`,

@@ -56,8 +56,10 @@
   <p>The freedom to build your website as desired!</p>
 </section>
 
+<div id="form-wrapper">
+
 <section id="form-details">
-  <form id="addProduct">
+  <form id="addProduct" enctype="multipart/form-data">
     <span>ADD PRODUCTS</span>
     <h2>Got new stock? Add them here!</h2>
     <input type="text" name="name" placeholder="Product Name" required>
@@ -145,6 +147,8 @@
 
 </section>
 
+</div>
+
 <section id="newsletter" class="section-p1 section-m1">
   <div class="newstext">
     <h4>Sign Up For Newsletters</h4>
@@ -212,4 +216,44 @@
 
 <script src="script.js"></script>
 <script src="project.js"></script>
+
+<style>
+  
+/* General styling for the section container */
+#form-details-edit {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px; /* Space between the table and form */
+    padding: 20px;
+    background-color: #f5f5f5;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+#form-wrapper {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+body {
+  align-items: center;
+}
+
+#form-details-remove {
+  display: flex;
+  align-items: center;
+}
+.cms-box {
+  flex: 1 1 45%;
+}
+
+form#editProduct {
+  flex: 1 1 45%;
+  align-items: center;
+}
+</style>
 </body>

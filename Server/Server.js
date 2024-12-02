@@ -8,7 +8,6 @@ const StripeRoute = require('./Routes/StripeRoute');
 const product = require('./Routes/ProductRoute');
 const orderRoute = require('./Routes/OrderRoute');
 const shippingRoute = require('./Routes/ShippingRoute');
-const { authenticateToken, authenticateAdmin } = require('./Middleware/authenticationToken');
 
 const app = express();
 
@@ -21,10 +20,6 @@ app.use('/api/product', product);
 app.use('/api/stripe', StripeRoute);
 app.use('/auth', loginRoute);
 app.use('/api/orders', orderRoute);
-
-app.get('/content_management.html', authenticateToken, authenticateAdmin, (req, res) => {
-  res.sendFile(path.join(__dirname, '../../e-commerce/content_management.html'));
-});
 
 
 const PORT = process.env.PORT || 3000;

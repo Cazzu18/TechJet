@@ -74,6 +74,11 @@
                 const response = await fetch(`http://localhost:3000/api/product/${productId}`);
                 const responseData = await response.json();
                 const productData = responseData.product;
+                // Check if the image URL has a leading '/', and remove it if it does
+                let imageUrl = productData.image_url;
+                if (imageUrl.startsWith('/')) {
+                    imageUrl = imageUrl.substring(1); // Remove the leading '/'
+                }
                 console.log(productData);
                 if (productData) {
                     // Dynamically populate the product details
@@ -86,7 +91,7 @@
                     imageContainer.innerHTML = ''; // Clear any existing images
 
                     // Check if productData.image_url is an array or a single string
-                    const images = Array.isArray(productData.image_url) ? productData.image_url : [productData.image_url];
+                    const images = Array.isArray(imageUrl) ? imageUrl : [imageUrl];
 
                     // Loop through each image and create the image elements dynamically
                     images.forEach((image, index) => {

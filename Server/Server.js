@@ -1,6 +1,7 @@
 const path = require('path');
 require('dotenv').config();
 const express = require('express');
+const { authenticateToken, authenticateAdmin } = require('./Middleware/authenticationToken');
 const cors = require('cors');
 const loginRoute = require('./Routes/UserRoute');
 const db = require('./initializeDatabase');
@@ -8,7 +9,6 @@ const StripeRoute = require('./Routes/StripeRoute');
 const product = require('./Routes/ProductRoute');
 const orderRoute = require('./Routes/OrderRoute');
 const shippingRoute = require('./Routes/ShippingRoute');
-const { authenticateToken, authenticateAdmin } = require('./Middleware/authenticationToken');
 
 const app = express();
 

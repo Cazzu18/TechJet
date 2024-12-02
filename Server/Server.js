@@ -13,10 +13,11 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use('/img/products', express.static(path.join(__dirname, '../../e-commerce/img/products')));
 app.use(express.static(path.join(__dirname, '../TechJet')));
 
-app.use('/api/stripe', StripeRoute);
 app.use('/api/product', product);
+app.use('/api/stripe', StripeRoute);
 app.use('/auth', loginRoute);
 app.use('/api/orders', orderRoute);
 

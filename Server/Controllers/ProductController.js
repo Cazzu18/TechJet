@@ -58,7 +58,14 @@ const getProductById = (req, res) => {
 
 const updateProduct = (req, res) => {
     const productId = req.params.product_id;
-    const { name, description, price, stock_quantity, category_id, image_url } = req.body;
+    const { name, description, price, stock_quantity, category_id} = req.body;
+
+    let image_url = req.body.image_url;
+
+    if (req.file) {
+        image_url = '../../e-commerce/img/products/' + req.file.filename;
+    }
+
 
     db.run(
         `UPDATE product SET name = ?, description = ?, price = ?, stock_quantity = ?, category_id = ?, image_url = ?  WHERE product_id = ?`,

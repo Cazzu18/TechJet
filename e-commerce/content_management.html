@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="https://kit.fontawesome.com/d0da99657e.js" crossorigin="anonymous"></script>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE-edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title> TechJet </title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<section id="header">
+  <a href="#"><img src="img/TechJet-Logo.png" class="logo" alt=""></a>
+
+  <div>
+    <ul id="navbar">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="shop.html">Shop</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a class="active" href="content_management.html">Content Management</a></li>
+      <li id="lg-bag"><a href="cart.html"><i class="fa-solid fa-cart-shopping"></i></a></li>
+      <a href="#" id="close"><i class="fa-solid fa-xmark"></i></a>
+      <img src="img/moon.png" id="icon">
+    </ul>
+  </div>
+  <div id="mobile">
+    <a href="cart.html"><i class="fa-solid fa-cart-shopping"></i></a>
+    <i id="bar"class="fas fa-outdent"></i>
+  </div>
+
+</section>
+
+<section id="page-header" class="about-header">
+  <h2>#ADD, EDIT, REMOVE PRODUCTS BASED ON AVAILABILITY</h2>
+  <p>The freedom to build your website as desired!</p>
+</section>
+
+<section id="form-details">
+  <form id="addProduct">
+    <span>ADD PRODUCTS</span>
+    <h2>Got new stock? Add them here!</h2>
+    <input type="text" name="name" placeholder="Product Name" required>
+    <textarea type="text" name="description" cols="30" rows="10" placeholder="Description" required></textarea>
+    <input type="number" min="0" max="10000" name ="price" placeholder="Price" required>
+    <input type="number" min="0" max="10000" name ="stock" placeholder="Stock Quantity" required>
+    <input type="number" min="0" max="10000" name ="category" placeholder="Category ID" required>
+    <input type="file" class="form-input" accept="image/*" required>
+    <button class="normal" type ="submit">Submit</button>
+  </form>
+</section>
+
+<section id="form-details-edit">
+
+  <div class="cms-box">
+    <h3>Product List</h3>
+    <table id="product-table">
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Price</th>
+        <th>Stock</th>
+        <th>Category</th>
+        <th>Image</th>
+      </tr>
+      </thead>
+      <tbody>
+      <!-- Table rows will be populated here -->
+      </tbody>
+    </table>
+  </div>
+
+  <form id="editProduct">
+    <span>EDIT PRODUCTS</span>
+    <h2>Make changes to existing stock</h2>
+    <input type="text" name="name" placeholder="Product Name" required>
+    <textarea type="text" name="description" cols="30" rows="10" placeholder="Description" required></textarea>
+    <input type="number" min="0" max="10000" step="0.01" name ="price" placeholder="Price" required>
+    <input type="number" min="0" max="10000" name ="stock" placeholder="Stock Quantity" required>
+    <input type="number" min="0" max="10000" name ="category" placeholder="Category ID" required>
+    <input type="file" class="form-input" accept="image/*" required>
+    <button class="normal" type ="submit">Submit</button>
+  </form>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      fetchProducts();
+
+      const editForm = document.querySelector('#editProduct');
+      editForm.addEventListener('submit', async function (e) {
+        e.preventDefault(); // Prevent default form submission
+        const productId = editForm.querySelector('input[name="product_id"]').value;
+        const formData = new FormData(editForm);
+
+        const data = {
+          name: formData.get('name'),
+          description: formData.get('description'),
+          price: formData.get('price'),
+          stock_quantity: formData.get('stock'),
+          category_id: formData.get('category'),
+        };
+
+        const imageFile = formData.get('image'); // Get the uploaded image file
+
+        // Check if an image file is uploaded
+        if (imageFile) {
+          try {
+            // Upload the image to the server
+            const imageUploadResponse = await uploadImageToServer(imageFile);
+            const imageUrl = imageUploadResponse.url; // Assuming the server returns the image URL
+            data.image_url = imageUrl;
+          } catch (error) {
+            console.error('Image upload failed:', error);
+            alert('Failed to upload image');
+            return;
+          }
+        } else {
+          data.image_url = ''; // No image uploaded, leave the field empty or use a default
+        }
+
+        // Make PUT request to update the product
+        fetch(`http://localhost:3000/api/product/${productId}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        })
+                .then(response => response.json())
+                .then(data => {
+                  if (data.message) {
+                    alert('Product updated successfully');
+                    fetchProducts(); // Re-fetch products to update the table
+                  } else {
+                    alert('Failed to update product');
+                  }
+                })
+                .catch(error => console.error('Error:', error));
+      });
+    });
+
+    // Function to upload image to the server
+    async function uploadImageToServer(imageFile) {
+      const formData = new FormData();
+      formData.append('image', imageFile);
+
+      const response = await fetch('http://localhost:3000/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to upload image');
+      }
+
+      const data = await response.json();
+      return data; // The response should contain the image URL or other details
+    }
+
+    function fetchProducts() {
+      fetch('http://localhost:3000/api/product')
+              .then(response => {
+                if (!response.ok) {
+                  throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+              })
+              .then(data => {
+                populateProductTable(data.products);
+              })
+              .catch(error => {
+                console.error('Error fetching products:', error);
+              });
+    }
+
+    function populateProductTable(products) {
+      const tableBody = document.querySelector('#product-table tbody');
+      tableBody.innerHTML = ''; // Clear existing rows
+
+      products.forEach(product => {
+        const row = document.createElement('tr');
+
+        row.innerHTML = `
+            <td>${product.product_id}</td>
+            <td>${product.name}</td>
+            <td>${product.description}</td>
+            <td>${product.price}</td>
+            <td>${product.stock_quantity}</td>
+            <td>${product.category_id}</td>
+            <td><img src="${product.image_url}" alt="${product.name}" style="width: 50px; height: 50px;"></td>
+        `;
+
+        // Add click event listener to row
+        row.addEventListener('click', () => {
+          fillEditForm(product);
+        });
+
+        tableBody.appendChild(row);
+      });
+    }
+
+    function fillEditForm(product) {
+      const editForm = document.querySelector('#editProduct');
+      editForm.querySelector('input[name="name"]').value = product.name;
+      editForm.querySelector('textarea[name="description"]').value = product.description;
+      editForm.querySelector('input[name="price"]').value = product.price;
+      editForm.querySelector('input[name="stock"]').value = product.stock_quantity;
+      editForm.querySelector('input[name="category"]').value = product.category_id;
+      // Set image (you may want to display the current image in the form, as it's required)
+      editForm.querySelector('input[type="file"]').value = ''; // You can handle file upload separately if needed
+
+      // Optionally: Add a hidden field to store the product ID for updating
+      if (!editForm.querySelector('input[name="product_id"]')) {
+        const productIdInput = document.createElement('input');
+        productIdInput.type = 'hidden';
+        productIdInput.name = 'product_id';
+        productIdInput.value = product.product_id;
+        editForm.appendChild(productIdInput);
+      } else {
+        editForm.querySelector('input[name="product_id"]').value = product.product_id;
+      }
+    }
+  </script>
+</section>
+
+<!-- <section id="form-details-remove">
+  <form id="title">
+    <span>REMOVE PRODUCTS</span>
+    <h2>Choose what to remove!</h2>
+  </form>
+
+  <div class="cms-box">
+    <h3>Product List</h3>
+    <table id="products-table">
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Price</th>
+        <th>Stock</th>
+        <th>Category</th>
+        <th>Image</th>
+      </tr>
+      </thead>
+      <tbody>
+
+      </tbody>
+    </table>
+  </div>
+
+  <form id="removeProduct">
+    <button class="normal" type ="submit">Remove</button>
+  </form>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      fetchProducts();
+
+      // When the user clicks a row in the table, populate the hidden field in the remove form
+      const table = document.querySelector('#products-table');
+      table.addEventListener('click', function (e) {
+        const row = e.target.closest('tr'); // Get the clicked row
+        if (!row) return;
+
+        const productId = row.cells[0].textContent; // Assuming the product ID is in the first column
+        const removeForm = document.querySelector('#removeProduct');
+        removeForm.querySelector('input[name="product_id"]').value = productId;
+      });
+
+      // Add event listener for remove form submission
+      const removeForm = document.querySelector('#removeProduct');
+      removeForm.addEventListener('submit', function (e) {
+        e.preventDefault(); // Prevent form submission
+
+        const productId = removeForm.querySelector('input[name="product_id"]').value;
+        if (!productId) {
+          alert('Please select a product to remove.');
+          return;
+        }
+
+        // Make DELETE request to remove the product
+        fetch(`http://localhost:3000/api/product/${productId}`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ productId }) // Send the productId as the body
+        })
+                .then(response => response.json())
+                .then(data => {
+                  if (data.message) {
+                    alert('Product removed successfully');
+                    fetchProducts(); // Re-fetch products to update the table
+                  } else {
+                    alert('Failed to remove product');
+                  }
+                })
+                .catch(error => console.error('Error:', error));
+      });
+    });
+
+
+
+    function fetchProducts() {
+      fetch('http://localhost:3000/api/product')
+              .then(response => {
+                if (!response.ok) {
+                  throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+              })
+              .then(data => {
+                populateProductTable(data.products);
+              })
+              .catch(error => {
+                console.error('Error fetching products:', error);
+              });
+    }
+
+    function populateProductTable(products) {
+      const tableBody = document.querySelector('#products-table tbody');
+      tableBody.innerHTML = ''; // Clear existing rows
+
+      products.forEach(product => {
+        const row = document.createElement('tr');
+
+        row.innerHTML = `
+            <td>${product.product_id}</td>
+            <td>${product.name}</td>
+            <td>${product.description}</td>
+            <td>${product.price}</td>
+            <td>${product.stock_quantity}</td>
+            <td>${product.category_id}</td>
+            <td><img src="${product.image_url}" alt="${product.name}" style="width: 50px; height: 50px;"></td>
+        `;
+
+        tableBody.appendChild(row);
+      });
+    }
+  </script>
+</section> -->
+
+<section id="newsletter" class="section-p1 section-m1">
+  <div class="newstext">
+    <h4>Sign Up For Newsletters</h4>
+    <p>Get E-mail updates about our latest items and <span>special offers</span></p>
+  </div>
+  <div class="form">
+    <input type="text" placeholder="Your email address">
+    <button class="normal">Sign Up</button>
+  </div>
+</section>
+
+<footer class="section-p1">
+  <div class="col">
+    <img class="logo" src="img/TechJet-Logo.png" alt="">
+    <h4>Contact</h4>
+    <p><strong>Address: </strong> 9HRW+W8M Unnamed Road, San Andres, Corozal, Belize</p>
+    <p><strong>Phone: </strong> +501 607-0507</p>
+    <p><strong>Hours: </strong>24/7</p>
+    <div class="follow">
+      <h4>Follow us</h4>
+      <div class="icon">
+        <i class="fab fa-facebook-f"></i>
+        <i class="fab fa-twitter"></i>
+        <i class="fab fa-instagram"></i>
+        <i class="fab fa-pinterest-p"></i>
+        <i class="fab fa-youtube"></i>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <h4>About</h4>
+    <a href="about.html">About us</a>
+    <a href="delivery-info.html">Delivery Information</a>
+    <a href="privacy-policy.html">Privacy Policy</a>
+    <a href="terms.html">Terms & Conditions</a>
+    <a href="contact.html">Contact Us</a>
+  </div>
+
+  <div class="col">
+    <h4>My Account</h4>
+    <a href="login.html">Sign In</a>
+    <a href="cart.html">View Cart</a>
+    <a href="wishlist.html">My Wishlist</a>
+    <a href="order.html">Track My Order</a>
+    <a href="help.html">Help</a>
+  </div>
+
+  <div class="col install">
+    <h4>Install App</h4>
+    <p>From App Store or Google Play</p>
+    <div class="row">
+      <img src="img/pay/app.jpg" alt="">
+      <img src="img/pay/play.jpg" alt="">
+
+    </div>
+    <p>Secure Payment Gateways</p>
+    <img src="img/pay/pay.png" alt="">
+  </div>
+
+  <div class="copyright">
+    <p>© 2022, TechJet- Tech Repair and Sale</p>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+<script src="project.js"></script>
+</body>

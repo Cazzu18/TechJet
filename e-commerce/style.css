@@ -876,6 +876,9 @@ footer .copyright{
 #form-details form span{
     color: var(--secondary-color);
     font-size: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 #contact-details .details span,
 #form-details-edit form span{

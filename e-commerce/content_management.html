@@ -11,6 +11,24 @@
 
 <body>
 
+<script>
+  // Check if the user is an admin by reading the JWT token or session
+  const token = localStorage.getItem('authToken'); // Assuming JWT token is saved in localStorage
+
+  if (!token) {
+    // Redirect to login page if no token is found
+    window.location.href = 'login.html';
+  } else {
+    // Decode the token to check if the user is an admin
+    const decodedToken = JSON.parse(atob(token.split('.')[1])); // Decode JWT payload
+    if (decodedToken.isAdmin !== 1) {
+      // Redirect to a page that non-admins can access if they're not an admin
+      window.location.href = 'unauthorized.html'; // Optional: Create an 'Unauthorized' page
+    }
+  }
+</script>
+
+
 <section id="header">
   <a href="#"><img src="img/TechJet-Logo.png" class="logo" alt=""></a>
 

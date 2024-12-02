@@ -20,11 +20,8 @@
                     <li><a class="active" href="shop.html">Shop</a></li>
                     <li><a href="about.html">About</a></li> 
                     <li><a href="contact.html">Contact</a></li>
-<<<<<<< HEAD
                     <li><a href="profile.html">Profile</a></li>
-=======
                     <li><a href="content_management.html">Content Management</a></li>
->>>>>>> c1b61e368fe9c135bf2be7c15259c46e615f763f
                     <li id="lg-bag"><a href="cart.html"><i class="fa-solid fa-cart-shopping"></i></a></li>
                     <a href="#" id="close"><i class="fa-solid fa-xmark"></i></a>
                     <img src="img/moon.png" id="icon">
@@ -41,6 +38,11 @@
         <section id="page-header">
             <h2>#Save Like Never Before</h2>
             <p>Save more with coupons & up to 70% off!</p>
+        </section>
+
+        <section id="search-section" class="section-p1">
+            <input type="text" id="search-bar" placeholder="Search for products..." onkeyup="searchProducts()">
+            <button id="search-btn">Search</button>
         </section>
 
         <section id="product1" class="section-p1">
@@ -130,4 +132,35 @@
         <script src="project.js"></script>
         <script src="shop.js"></script>
     </body>  
+
+    <style>
+        #search-section {
+            display: flex;
+            justify-content: center;
+            padding: 20px 0;
+            background-color: #f1f1f1;
+        }
+        
+        #search-bar {
+            width: 70%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        
+        #search-btn {
+            padding: 10px 15px;
+            margin-left: 10px;
+            background-color: #000;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        #search-btn:hover {
+            background-color: #333;
+        }
+    </style>
 </html>

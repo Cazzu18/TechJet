@@ -1,23 +1,36 @@
-// Example API endpoint
-const apiEndpoint = "http://localhost:3000/api/product"; // Replace with your actual API URL
+const allProductsEndpoint = "http://localhost:3000/api/product"; // Your endpoint to fetch all products
+
+let currentPage = 1;  // Track the current page
+const limit = 10;     // Number of products per page
+let allProducts = []; // Store all products after the initial load
+let searchQuery = ''; // Store the current search query
 
 // Function to fetch and display products
-const loadProducts = async () => {
+const loadProducts = async (page = 1) => {
     try {
-        const response = await fetch(apiEndpoint); 
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+        // If we haven't loaded the products yet, fetch them
+        if (allProducts.length === 0) {
+            const response = await fetch(allProductsEndpoint);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const responseData = await response.json();
+            allProducts = responseData.products || responseData; // Store the products
         }
-        const responseData = await response.json(); 
-        console.log("Full API Response:", responseData);
 
-        // Extract products array (check for wrapper)
-        const products = responseData.products || responseData;
+        // Filter the products based on the search query
+        const filteredProducts = allProducts.filter(product => {
+            return product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                product.description.toLowerCase().includes(searchQuery.toLowerCase());
+        });
 
-        if (Array.isArray(products)) {
+        // Pagination logic
+        const startIndex = (page - 1) * limit;
+        const paginatedProducts = filteredProducts.slice(startIndex, startIndex + limit);
+
+        if (Array.isArray(paginatedProducts)) {
             const productContainer = document.querySelector('.pro-container');
-            productContainer.innerHTML = products.map(product => {
-                // Check if the image URL has a leading '/', and remove it if it does
+            productContainer.innerHTML = paginatedProducts.map(product => {
                 let imageUrl = product.image_url;
                 if (imageUrl.startsWith('/')) {
                     imageUrl = imageUrl.substring(1); // Remove the leading '/'
@@ -42,8 +55,11 @@ const loadProducts = async () => {
                     </div>
                 `;
             }).join('');
+
+            // Update pagination links
+            updatePagination(filteredProducts.length, page);
         } else {
-            console.error('API returned a non-array structure:', products);
+            console.error('API returned a non-array structure:', filteredProducts);
             throw new Error('Invalid data format from API');
         }
     } catch (error) {
@@ -53,4 +69,58 @@ const loadProducts = async () => {
     }
 };
 
-loadProducts();
+// Update pagination buttons
+const updatePagination = (totalProducts, currentPage) => {
+    const totalPages = Math.ceil(totalProducts / limit); // Calculate total pages
+    const paginationContainer = document.querySelector('.pagination ul');
+    paginationContainer.innerHTML = ''; // Clear current pagination
+
+    // Create pagination links
+    for (let i = 1; i <= totalPages; i++) {
+        const li = document.createElement('li');
+        li.classList.add('link');
+        if (i === currentPage) {
+            li.classList.add('active');
+        }
+        li.textContent = i;
+        li.setAttribute('value', i);
+
+        li.addEventListener('click', () => {
+            loadProducts(i); // Load the clicked page
+        });
+
+        paginationContainer.appendChild(li);
+    }
+};
+
+// Previous and next buttons
+const setupPaginationButtons = () => {
+    const prevButton = document.querySelector('.btn1');
+    const nextButton = document.querySelector('.btn2');
+
+    prevButton.addEventListener('click', () => {
+        if (currentPage > 1) {
+            currentPage--;
+            loadProducts(currentPage);
+        }
+    });
+
+    nextButton.addEventListener('click', () => {
+        currentPage++;
+        loadProducts(currentPage);
+    });
+};
+
+// Handle search input
+const handleSearch = () => {
+    searchQuery = document.getElementById('search-bar').value.trim();
+    currentPage = 1; // Reset to the first page for new search
+    loadProducts(currentPage); // Reload products with the new search query
+};
+
+// Event listener for search bar input
+document.getElementById('search-bar').addEventListener('input', handleSearch);
+
+// Initialize pagination and load products
+setupPaginationButtons();
+loadProducts(currentPage);

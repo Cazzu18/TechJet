@@ -1561,6 +1561,143 @@ footer .copyright{
 
 }
 
+/* General Edit Table Styling */
+#form-details-edit table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#form-details-edit table th, #form-details-edit table td {
+    padding: 12px 15px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+#form-details-edit table th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+#form-details-edit table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+#form-details-edit table tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Adding responsive design */
+@media screen and (max-width: 768px) {
+    #form-details-edit table, #form-details-edit thead, #form-details-edit tbody, #form-details-edit th, #form-details-edit td, #form-details-edit tr {
+        display: block;
+    }
+
+    #form-details-edit table th {
+        background-color: #fff;
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+
+    #form-details-edit table tr {
+        border: 1px solid #ddd;
+        margin-bottom: 10px;
+    }
+
+    #form-details-edit table td {
+        text-align: left;
+        padding: 8px;
+        position: relative;
+    }
+
+    #form-details-edit table td:before {
+        content: attr(data-label);
+        font-weight: bold;
+        position: absolute;
+        left: 10px;
+        top: 10px;
+    }
+}
+
+/* Styling for images inside table */
+#form-details-edit table td img {
+    max-width: 100px;
+    height: auto;
+    border-radius: 5px;
+}
+
+/* General Remove Table Styling */
+#form-details-remove table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#form-details-remove table th, #form-details-remove table td {
+    padding: 12px 15px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+#form-details-remove table th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+#form-details-remove table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+#form-details-remove table tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Adding responsive design */
+@media screen and (max-width: 768px) {
+    #form-details-remove table, #form-details-remove thead, #form-details-remove tbody, #form-details-remove th, #form-details-remove td, #form-details-remove tr {
+        display: block;
+    }
+
+    #form-details-remove table th {
+        background-color: #fff;
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+
+    #form-details-remove table tr {
+        border: 1px solid #ddd;
+        margin-bottom: 10px;
+    }
+
+    #form-details-remove table td {
+        text-align: left;
+        padding: 8px;
+        position: relative;
+    }
+
+    #form-details-remove table td:before {
+        content: attr(data-label);
+        font-weight: bold;
+        position: absolute;
+        left: 10px;
+        top: 10px;
+    }
+}
+
+/* Styling for images inside table */
+#form-details-edit-remove td img {
+    max-width: 100px;
+    height: auto;
+    border-radius: 5px;
+}
+
+
 /* Card gateway */
 #card-gateway *{
     font-family: 'Poppins', sans-serif;

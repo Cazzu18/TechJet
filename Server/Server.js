@@ -1,6 +1,7 @@
 const path = require('path');
 require('dotenv').config();
 const express = require('express');
+const { authenticateToken, authenticateAdmin } = require('./Middleware/authenticationToken');
 const cors = require('cors');
 const loginRoute = require('./Routes/UserRoute');
 const db = require('./initializeDatabase');
@@ -20,6 +21,10 @@ app.use('/api/product', product);
 app.use('/api/stripe', StripeRoute);
 app.use('/auth', loginRoute);
 app.use('/api/orders', orderRoute);
+
+app.get('/content_management.html', authenticateToken, authenticateAdmin, (req, res) => {
+  res.sendFile(path.join(__dirname, '../../e-commerce/content_management.html'));
+});
 
 
 const PORT = process.env.PORT || 3000;

@@ -3,7 +3,7 @@ const router = express.Router();
 const { authenticateToken, authenticateAdmin } = require('../Middleware/authenticationToken');
 const { getOrderById, getAllOrders, alterOrder, createNewOrder, deleteOrder } = require('../Controllers/OrderController');
 
-router.get('/', authenticateToken, authenticateAdmin, getAllOrders);
+router.get('/', authenticateToken, getAllOrders);
 router.get('/:order_id', authenticateToken, getOrderById);
 router.put('/:order_id', authenticateToken, authenticateAdmin, alterOrder);
 router.post('/', authenticateToken, createNewOrder);

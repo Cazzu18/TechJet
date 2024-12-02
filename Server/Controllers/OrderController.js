@@ -44,15 +44,149 @@ const getOrderById = (req, res) => {
 };
 
 const getAllOrders = (req, res) => {
-    const query = `
-        SELECT o.order_id, o.user_id, o.total_amount, o.status, o.order_date
-        FROM orders o`;
+    // Assuming the user object is attached to the request (e.g., from middleware)
+    const user = req.user; // `req.user` contains the authenticated user object
+
+    if (!user) {
+        return res.status(401).json({ error: "Unauthorized: No user found" });
+    }
+
+    if(!user.isAdmin){
+        const query = `
+        SELECT 
+            o.order_id, 
+            o.user_id, 
+            o.total_amount, 
+            o.status, 
+            o.order_date, 
+            s.shipping_address, 
+            s.shipping_status, 
+            s.shipping_date,
+            p.product_id, 
+            p.name AS product_name, 
+            p.price, 
+            oi.quantity
+        FROM orders o
+        LEFT JOIN orderInfo oi ON o.order_id = oi.order_id
+        LEFT JOIN product p ON oi.product_id = p.product_id
+        LEFT JOIN shipping s ON o.order_id = s.order_id
+        WHERE o.user_id = ?  -- Only fetch orders for the authenticated user
+    `;
+
+    db.all(query, [user.user_id], (err, rows) => {
+        if (err) {
+            return res.status(500).json({ error: "Error retrieving orders" });
+        }
+        if (!rows.length) {
+            return res.status(404).json({ message: "No orders found" });
+        }
+
+        // Group data by order_id
+        const orders = rows.reduce((acc, row) => {
+            let order = acc[row.order_id];
+            if (!order) {
+                // If the order doesn't exist, initialize it
+                order = {
+                    order_id: row.order_id,
+                    user_id: row.user_id,
+                    total_amount: row.total_amount,
+                    status: row.status,
+                    order_date: row.order_date,
+                    shipping: {
+                        address: row.shipping_address,
+                        status: row.shipping_status,
+                        date: row.shipping_date
+                    },
+                    products: []
+                };
+                acc[row.order_id] = order;
+            }
+
+            // Add product information if it exists
+            if (row.product_id) {
+                order.products.push({
+                    product_id: row.product_id,
+                    name: row.product_name,
+                    price: row.price,
+                    quantity: row.quantity
+                });
+            }
+
+            return acc;
+        }, {});
+
+        // Convert the orders object into an array and return
+        return res.status(200).json({ orders: Object.values(orders) });
+    });
+    }
+
+    if(user.isAdmin) {
+        const query = `
+        SELECT 
+            o.order_id, 
+            o.user_id, 
+            o.total_amount, 
+            o.status, 
+            o.order_date, 
+            s.shipping_address, 
+            s.shipping_status, 
+            s.shipping_date,
+            p.product_id, 
+            p.name AS product_name, 
+            p.price, 
+            oi.quantity
+        FROM orders o
+        LEFT JOIN orderInfo oi ON o.order_id = oi.order_id
+        LEFT JOIN product p ON oi.product_id = p.product_id
+        LEFT JOIN shipping s ON o.order_id = s.order_id
+    `;
+
     db.all(query, [], (err, rows) => {
         if (err) {
             return res.status(500).json({ error: "Error retrieving orders" });
         }
-        return res.status(200).json({ orders: rows });
+        if (!rows.length) {
+            return res.status(404).json({ message: "No orders found" });
+        }
+
+        // Group data by order_id
+        const orders = rows.reduce((acc, row) => {
+            let order = acc[row.order_id];
+            if (!order) {
+                // If the order doesn't exist, initialize it
+                order = {
+                    order_id: row.order_id,
+                    user_id: row.user_id,
+                    total_amount: row.total_amount,
+                    status: row.status,
+                    order_date: row.order_date,
+                    shipping: {
+                        address: row.shipping_address,
+                        status: row.shipping_status,
+                        date: row.shipping_date
+                    },
+                    products: []
+                };
+                acc[row.order_id] = order;
+            }
+
+            // Add product information if it exists
+            if (row.product_id) {
+                order.products.push({
+                    product_id: row.product_id,
+                    name: row.product_name,
+                    price: row.price,
+                    quantity: row.quantity
+                });
+            }
+
+            return acc;
+        }, {});
+
+        // Convert the orders object into an array and return
+        return res.status(200).json({ orders: Object.values(orders) });
     });
+    }
 };
 
 const alterOrder = (req, res) => {

@@ -25,20 +25,21 @@ const getProductByCategoryId = (req, res) => {
     });
 };
 
-const addProduct = (req, res) => {
-    const { name, description, price, stock_quantity, category_id, image_url, callback} = req.body;
+const addProduct = (productData, callback) => {
+    const { name, description, price, stock_quantity, category_id, image_url } = productData;
+
     db.run(`
         INSERT INTO product(name, description, price, stock_quantity, category_id, image_url)
         VALUES(?, ?, ?, ?, ?, ?)`,
         [name, description, price, stock_quantity, category_id, image_url],
-        function (err){
-            if(err){
+        function (err) {
+            if (err) {
                 return callback(err, null);
             }
             return callback(null, { product_id: this.lastID, name, description, price, stock_quantity, category_id, image_url });
         }
-    )
-};  
+    );
+};
 
 const getProductById = (req, res) => {
     const productId = req.params.product_id;

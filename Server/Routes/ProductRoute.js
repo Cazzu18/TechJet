@@ -19,6 +19,7 @@ const upload = multer({ storage: storage });
 
 // Endpoint to handle image upload
 router.post('/upload', upload.single('image'), (req, res) => {
+    console.log("upload", req.file);
     if (req.file) {
         const relativePath = `img/products/${req.file.filename}`; // No leading '/'
         res.status(200).json({ url: relativePath });
@@ -31,15 +32,10 @@ router.post('/upload', upload.single('image'), (req, res) => {
 router.put('/:product_id', authenticateToken, authenticateAdmin, upload.single('image'), updateProduct);
 
 router.post('/', upload.single('image'), (req, res) => {
-    const { name, description, price, stock, category } = req.body;
-    let image_url = '';
-
-    if (req.file) {
-        image_url = `img/products/${req.file.filename}`; // Store the relative image URL
-    }
+    const { name, description, price, stock_quantity, category_id, image_url } = req.body;
 
     // Call the addProduct function to add the product to the database
-    addProduct(name, description, price, stock, category, image_url, (err, result) => {
+    addProduct({ name, description, price, stock_quantity, category_id, image_url }, (err, result) => {
         if (err) {
             return res.status(500).json({ error: 'Failed to add product' });
         }

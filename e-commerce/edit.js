@@ -85,14 +85,15 @@ function fetchProducts(tableId) {
             return response.json();
         })
         .then(data => {
-            populateProductTable(data.products, tableId);
+            populateProductsTable(data.products, tableId);
         })
         .catch(error => {
             console.error('Error fetching products:', error);
         });
 }
 
-function populateProductTable(products, tableId) {
+
+function populateProductsTable(products, tableId) {
     const tableBody = document.querySelector(`#${tableId} tbody`);
     tableBody.innerHTML = ''; // Clear existing rows
 
@@ -113,15 +114,15 @@ function populateProductTable(products, tableId) {
         `;
 
         // Add click event listener to row
-        row.addEventListener('mousedown', () => {
-            filleditForm(product);
+        row.addEventListener('click', () => {
+            fillEditForm(product);
         });
 
         tableBody.appendChild(row);
     });
 }
 
-function filleditForm(product) {
+function fillEditForm(product) {
     const editForm = document.querySelector('#editProduct');
 
     editForm.querySelector('input[name="name"]').value = product.name;
@@ -132,20 +133,18 @@ function filleditForm(product) {
 
     // Set image (you may want to display the current image in the form, as it's required)
     const imagePreview = editForm.querySelector('#image-preview');
-    //editForm.querySelector('input[type="file"]').value = ''; // You can handle file upload separately if needed
+    editForm.querySelector('input[type="file"]').value = ''; // You can handle file upload separately if needed
 
     if (imagePreview) {
         imagePreview.src = product.image_url || '';
     }
 
-    // Add a hidden field to store the product ID for updating
-    if (!editForm.querySelector('input[name="product_id"]')) {
-        const productIdInput = document.createElement('input');
+    let productIdInput = editForm.querySelector('input[name="product_id"]');
+    if (!productIdInput) {
+        productIdInput = document.createElement('input');
         productIdInput.type = 'hidden';
         productIdInput.name = 'product_id';
-        productIdInput.value = product.product_id;
         editForm.appendChild(productIdInput);
-    } else {
-        editForm.querySelector('input[name="product_id"]').value = product.product_id;
     }
+    productIdInput.value = product.product_id;
 }

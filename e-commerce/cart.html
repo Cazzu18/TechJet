@@ -130,24 +130,52 @@
 </footer>
 
 <script>
-    // Stripe Checkout integration
-    const stripe = Stripe('pk_test_51LkvujEYRRBsdae4zOYzpHCN8K4ve9tDX5NLSqxJd7iKG96iVHo6gaGYT0Mqzx2JC7whDdVXWY2cBaePg79DUeC5001QYOjtz5'); // Replace with your Stripe public key
 
     document.getElementById("gateway").onclick = async function () {
-        try {
-            const response = await fetch('http://localhost:3000/create-checkout-session', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-            const session = await response.json();
+        const cart = JSON.parse(localStorage.getItem("cart")) || [];
+        if (cart.length === 0) {
+            alert("Your cart is empty. Please add items before checking out.");
+            return;
+        }
 
-            // Redirect to Stripe Checkout
-            await stripe.redirectToCheckout({ sessionId: session.id });
+        const userId = 1; // Replace with the authenticated user's ID.
+        const totalAmount = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+        const shippingAddress = "Default Address"; // Replace with the user's shipping address.
+
+        const products = cart.map(item => ({
+            product_id: item.product_id, // Ensure each item has `product_id` in the local storage.
+            quantity: item.quantity
+        }));
+
+        const orderData = {
+            user_id: userId,
+            products: products,
+            total_amount: totalAmount,
+            order_date: new Date().toISOString(),
+            shipping_address: shippingAddress
+        };
+
+        try {
+            const response = await fetch("http://localhost:3000/api/orders", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(orderData)
+            });
+
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.error || "Failed to create order");
+            }
+
+            const result = await response.json();
+            alert(`Order created successfully! Order ID: ${result.order_id}`);
+            localStorage.removeItem("cart"); // Clear cart after successful checkout.
+            window.location.href = "order.html"; // Redirect to order page or confirmation page.
         } catch (error) {
-            console.error('Error:', error);
-            alert('Something went wrong. Please try again.');
+            console.error("Error creating order:", error);
+            alert("Error creating order. Please try again.");
         }
     };
 

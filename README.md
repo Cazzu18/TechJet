@@ -1,10 +1,10 @@
-E-Commerce Website for Hardware Products
+#E-Commerce Website for Hardware Products
 
-Overview
+##Overview
 
 This e-commerce platform is designed to provide a seamless shopping experience for customers looking to purchase hardware products, including smartphones, gaming chairs, RAM, computer components, and more. The website offers an intuitive user interface, secure transactions, and a robust backend to efficiently manage products, orders, and customers.
 
-Features
+##Features
 
 User Authentication: Secure login and registration for customers.
 
@@ -22,7 +22,7 @@ Admin Dashboard: Manage inventory, orders, users, and promotional offers.
 
 Customer Support: Contact support via email or chat for assistance.
 
-Technologies Used
+##Technologies Used
 
 Frontend: HTML, CSS, JavaScript 
 
@@ -34,13 +34,13 @@ Authentication: JWT-based authentication for security
 
 Payment Gateway: Stripe
 
-Installation & Setup
+##Installation & Setup
 
-Clone the repository:
+###Clone the repository:
 
 git clone https://github.com/Cazzu18/TechJet.git
 
-Contribution
+##Contribution
 
 We welcome contributions to improve the platform. To contribute:
 
